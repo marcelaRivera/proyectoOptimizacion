@@ -104,11 +104,13 @@ def constructiveHeuristic(S, O, P, R):
 					if sePuede == -1:
 						if worker2 not in O[jobsOrders[contJob]]:
 							sePuede = 1
+							break
 						else:
 							sePuede = 0
 					elif sePuede == 1:
 						if worker2 not in O[jobsOrders[contJob]]:
 							sePuede == 1
+							break
 						else:
 							sePuede = 0						
 					elif sePuede == 0:
