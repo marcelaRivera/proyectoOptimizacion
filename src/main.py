@@ -1,7 +1,7 @@
 from lecture import readFile
+import random
 
-
-
+cantidadEmpleados = 0
 #Descripcion: funcion que permite calcular la cantidad de trabajadores que pueden realizar
 #el trabajo i. Con i = 0,...., cantidad de trabajos totales
 #Entrada: vector que contiene los trabajos que puede realizar el trabajador i. Con i = 0,..., cantidad de trabajadores. 
@@ -24,7 +24,7 @@ def getNumberEmployersCalificatesInJobs(jobsCalificate, jobs):
 
 #descripcion: permite conocer los trabajadores que pueden realizar la tarea j
 #Entrada: matriz con las tareas que realiza cada trabajador, cantidad de trabajos
-#Salida: matriz con os trabajadores que pueden hacer el trabajo i
+#Salida: matriz con los trabajadores que pueden hacer el trabajo i
 def getEmployersCalificatesInJobs(jobsCalificate, jobs):
 	workers = []
 	for t in range(jobs):
@@ -49,16 +49,16 @@ def orderList(jobs, jobsOrder):
 	hourInitIdFinal = []  #vector que contiene los identificadores ordenados de forma ascendente según Sj+Pj
 	j = 0
 	for i in jobs:
-		hoursInitTuple.append([i + len(jobsOrder[j]), j])
+		hoursInitTuple.append([i + len(jobsOrder[j]), j, i, len(jobsOrder[j])])
 		hourInitId.append(i + len(jobsOrder[j]))
 		j = j + 1
 	hourInitId.sort()
 	for i in hourInitId:
 		for j in hoursInitTuple:
-			if i == j[0]:
-				hourInitIdFinal.append(j[1])
-	print('tareas ordenadas: \n')
-	print(hourInitIdFinal)
+			if i == j[0] and (i-j[3]) == j[2]:
+				if j[1] not in hourInitIdFinal:
+					hourInitIdFinal.append(j[1])
+				
 	return hourInitIdFinal
 
 #Descripcion: vector que ordena de manera ascendente las tareas según el criterio: Sj+Pj.
@@ -69,16 +69,86 @@ def orderList(jobs, jobsOrder):
 def getHourInit(jobs):
 	hourInitForJob = [] #vector con horas de inicio
 	for i in jobs:
-		hourInitForJob.append(int(i[0]))
-		
+		hourInitForJob.append(int(i[0]))	
 	return hourInitForJob
 
 #Descripcion: funcion que permite construir una solucion inicial factible
 #Entrada: S vector con las horas de inicio, O vector con las tareas superpuestas de j,
-#P vector con los empleados calificados para tabajo j, R vector con los trabajos asignados al trabajador w
+#P vector con los empleados calificados para trabajo j, R vector con los trabajos asignados al trabajador w
 #Salida: vector con una solucion factible
 def constructiveHeuristic(S, O, P, R):
-	orderList(S, P)
+	jobsOrders = orderList(S, P)
+	jobsOrdersAux = orderList(S, P)
+	print('lista ordenada', jobsOrders)
+	contJob = 0
+	contWorker = 0
+	work = 0
+	sePuede = -1
+	rAux = list()
+	for i in range(cantidadEmpleados):
+		rAux.append(list())
+	#print('P es: ', P)
+	print('O es: ', O)
+	while len(jobsOrdersAux) > 0:
+		jobsOrdersAux.pop(0)
+		sePuede = -1
+		for worker in P[jobsOrders[contJob]]:
+			if len(rAux[worker]) == 0:
+				rAux[worker].append(jobsOrders[contJob])
+				break
+			else:
+				for worker2 in rAux[worker]:
+					#print('el work es:',worker2)
+					#print('las tareas superpuestas son: ', O[jobsOrders[contJob]])
+					sePuede = -1
+					if sePuede == -1:
+						if worker2 not in O[jobsOrders[contJob]]:
+							sePuede = 1
+						else:
+							sePuede = 0
+							#print(sePuede,'trabajo:', jobsOrders[contJob])
+					elif sePuede == 1:
+						if worker2 not in O[jobsOrders[contJob]]:
+							sePuede == 1
+						else:
+							sePuede = 0						
+					elif sePuede == 0:
+						break
+
+				if sePuede == 1:
+					rAux[worker].append(jobsOrders[contJob])
+					break
+				
+		print('RAUX ES: ', rAux)
+		if sePuede == 0:
+			e = random.randrange(cantidadEmpleados)
+			print('e es: ', e, 'blablabla el trbajo descartado es: ', jobsOrders[contJob])
+
+
+
+
+
+			#if jobsOrders[contJob] not in rAux[worker] and worker in P[jobsOrders[contJob]]:
+				#print('entro aca?')
+			#	if len(rAux[worker]) == 0:
+					#print('el job es:', jobsOrders[contJob])
+					#print('O es:', O[jobsOrders[contJob]])
+			#		rAux[worker].append(jobsOrders[contJob])
+					#print('R1 es', rAux)
+			#		break
+			#	else:
+					#print('el job es:', jobsOrders[contJob])
+					#print('O es:', O[jobsOrders[contJob]])
+			#		for job in rAux[worker]:
+			#			if jobsOrders[contJob] not in O[worker]:
+			#				rAux[worker].append(jobsOrders[contJob])
+						#print('R2 es ', rAux, 'cont es:', contJob)
+			#				break
+		
+		contJob = contJob + 1
+		
+		#print(rAux)
+	
 
 
 #Descripcion: permite obtener los trabajos superpuestos entre si
@@ -107,7 +177,7 @@ def constructiveO(jobs):
 	return C
 
 
-	
+
 def main():
 
 	jobs = []
@@ -118,7 +188,7 @@ def main():
 	R = [] #trabajos asignados al trabajador w
 	S = [] #horas de inicio de cada trabajo 
 	jobs, jobsCalificate =  readFile()
-
+	global cantidadEmpleados
 	print("La cantidad de tareas es: \n")
 	print(str(len(jobs)))
 	print("\n")
@@ -138,10 +208,11 @@ def main():
 	#print('cantidad de personas aptas para la tarea i')
 	#print(jobsOrder)
 	S = getHourInit(jobs)
-	print('S es: ', S)
 	O = constructiveO(jobs)
+	cantidadEmpleados = len(jobsCalificate)
 	P = getEmployersCalificatesInJobs(jobsCalificate, len(jobs))
 	constructiveHeuristic(S, O, P, R)
 	#print('marcara', O)
+	
 
 main()
