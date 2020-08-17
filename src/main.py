@@ -106,7 +106,6 @@ def constructiveHeuristic(S, O, P, R):
 							sePuede = 1
 						else:
 							sePuede = 0
-							#print(sePuede,'trabajo:', jobsOrders[contJob])
 					elif sePuede == 1:
 						if worker2 not in O[jobsOrders[contJob]]:
 							sePuede == 1
@@ -118,12 +117,8 @@ def constructiveHeuristic(S, O, P, R):
 				if sePuede == 1:
 					rAux[worker].append(jobsOrders[contJob])
 					break
-				
-		print('RAUX ES: ', rAux)
-		if sePuede == 0:
-			e = random.randrange(cantidadEmpleados)
-			print('e es: ', e, 'blablabla el trbajo descartado es: ', jobsOrders[contJob])
-
+				#print(sePuede,'trabajo:', jobsOrders[contJob])
+		
 
 
 
@@ -148,7 +143,8 @@ def constructiveHeuristic(S, O, P, R):
 		contJob = contJob + 1
 		
 		#print(rAux)
-	
+	print('los trabajos que se pueden asignar son: ', rAux)
+		
 
 
 #Descripcion: permite obtener los trabajos superpuestos entre si
