@@ -22,9 +22,25 @@ def getNumberEmployersCalificatesInJobs(jobsCalificate, jobs):
 	return numberEmployers
 
 
+#descripcion: permite conocer los trabajadores que pueden realizar la tarea j
+#Entrada: matriz con las tareas que realiza cada trabajador, cantidad de trabajos
+#Salida: matriz con os trabajadores que pueden hacer el trabajo i
+def getEmployersCalificatesInJobs(jobsCalificate, jobs):
+	workers = []
+	for t in range(jobs):
+		cont = 0
+		workersAux = []
+		for i in jobsCalificate:
+			for j in i:
+				if t == int(j):
+					workersAux.append(cont)
+			cont = cont + 1
+		workers.append(workersAux)
+	return workers
+
 #Descripcion: vector que ordena de manera ascendente las tareas según el criterio: Sj+Pj.
 #Donde Sj corresponde a la hora de inicio de la tarea j y Pj indica la cantidad de personas que pueden hacr la tarea j
-#Entrada: vector con hora de inicio y fin de la tarea i. Vector con la cantidad de trabajadores que pueden hacer la tarea j
+#Entrada: vector con hora de inicio y fin de la tarea i. Vector con los trabajadores que pueden hacer la tarea j
 #Salida: vector con trabajos ordenados segun el criterio Sj+Pj. En cada posicion del arreglo se tiene el 
 #identificador #de la tarea
 def orderList(jobs, jobsOrder):
@@ -33,8 +49,8 @@ def orderList(jobs, jobsOrder):
 	hourInitIdFinal = []  #vector que contiene los identificadores ordenados de forma ascendente según Sj+Pj
 	j = 0
 	for i in jobs:
-		hoursInitTuple.append([int(i[0]) + jobsOrder[j], j])
-		hourInitId.append(int(i[0]) + jobsOrder[j])
+		hoursInitTuple.append([i + len(jobsOrder[j]), j])
+		hourInitId.append(i + len(jobsOrder[j]))
 		j = j + 1
 	hourInitId.sort()
 	for i in hourInitId:
@@ -45,11 +61,62 @@ def orderList(jobs, jobsOrder):
 	print(hourInitIdFinal)
 	return hourInitIdFinal
 
+#Descripcion: vector que ordena de manera ascendente las tareas según el criterio: Sj+Pj.
+#Donde Sj corresponde a la hora de inicio de la tarea j y Pj indica la cantidad de personas que pueden hacr la tarea j
+#Entrada: vector con hora de inicio y fin de la tarea i. Vector con la cantidad de trabajadores que pueden hacer la tarea j
+#Salida: vector con trabajos ordenados segun el criterio Sj+Pj. En cada posicion del arreglo se tiene el 
+#identificador #de la tarea
+def getHourInit(jobs):
+	hourInitForJob = [] #vector con horas de inicio
+	for i in jobs:
+		hourInitForJob.append(int(i[0]))
+		
+	return hourInitForJob
+
+#Descripcion: funcion que permite construir una solucion inicial factible
+#Entrada: S vector con las horas de inicio, O vector con las tareas superpuestas de j,
+#P vector con los empleados calificados para tabajo j, R vector con los trabajos asignados al trabajador w
+#Salida: vector con una solucion factible
+def constructiveHeuristic(S, O, P, R):
+	orderList(S, P)
+
+
+#Descripcion: permite obtener los trabajos superpuestos entre si
+#entrada: matriz con los horarios de inicio y fin de cada trabajo
+#Salida: matriz que indica para cada trabajo (fila), el conjunto de trabajos que topa con sus horarios
+#y por lo tanto, el trabajador no podra tener asignada dos tareas del mismo conjunto.
+#ejemplo: [[0,1,2],[3,6,7]] esto implica que un trabajador no puede tener asignada la tarea 0,1 y 2 al mismo tiempo
+#tampoco se puede asignar al mismo trabajador las tareas 3,6,7. Es decir, estas tareas deben ser hechar por
+#diferentes trabajadores
+def constructiveO(jobs):
+	C = []
+	cAux = []
+	verificador = 0
+	for i in jobs:
+		cont = 0
+		cAux = []
+		verificador = 0
+		for j in jobs:
+			if j != i:
+				if int(j[0]) < int(i[1]) and int(j[1]) > int(i[0]):
+					cAux.append(cont)
+					verificador = 1
+			cont = cont + 1
+		if(verificador == 1):
+			C.append(cAux)
+	return C
+
+
+	
 def main():
 
 	jobs = []
 	jobsCalificate = []
 	jobsOrder = []
+	O = [] #vector con las tareas superpuestas
+	P = [] #empleados calificados para hacer la tarea i
+	R = [] #trabajos asignados al trabajador w
+	S = [] #horas de inicio de cada trabajo 
 	jobs, jobsCalificate =  readFile()
 
 	print("La cantidad de tareas es: \n")
@@ -67,9 +134,14 @@ def main():
 	print("Los trabajos calificados de cada trabajador son: \n")
 	print(jobsCalificate)
 	print("\n")
-	jobsOrder = getNumberEmployersCalificatesInJobs(jobsCalificate, len(jobs))
-	print('cantidad de personas aptas para la tarea i')
-	print(jobsOrder)
-	orderList(jobs, jobsOrder)
+	#jobsOrder = getNumberEmployersCalificatesInJobs(jobsCalificate, len(jobs))
+	#print('cantidad de personas aptas para la tarea i')
+	#print(jobsOrder)
+	S = getHourInit(jobs)
+	print('S es: ', S)
+	O = constructiveO(jobs)
+	P = getEmployersCalificatesInJobs(jobsCalificate, len(jobs))
+	constructiveHeuristic(S, O, P, R)
+	#print('marcara', O)
 
 main()
