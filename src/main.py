@@ -79,48 +79,38 @@ def getHourInit(jobs):
 def constructiveHeuristic(S, O, P, R):
 	jobsOrders = orderList(S, P)
 	jobsOrdersAux = orderList(S, P)
+	jobsAux = []
 	print('lista ordenada', jobsOrders)
 	contJob = 0
-	contWorker = 0
-	work = 0
-	sePuede = -1
 	rAux = list()
 	for i in range(cantidadEmpleados):
 		rAux.append(list())
 	#print('P es: ', P)
-	print('O es: ', O)
+	#print('O es: ', O)
 	while len(jobsOrdersAux) > 0:
 		jobsOrdersAux.pop(0)
 		sePuede = -1
 		for worker in P[jobsOrders[contJob]]:
 			if len(rAux[worker]) == 0:
 				rAux[worker].append(jobsOrders[contJob])
+				sePuede = 1
 				break
 			else:
 				for worker2 in rAux[worker]:
-					#print('el work es:',worker2)
-					#print('las tareas superpuestas son: ', O[jobsOrders[contJob]])
-					sePuede = -1
-					if sePuede == -1:
-						if worker2 not in O[jobsOrders[contJob]]:
-							sePuede = 1
-						else:
-							sePuede = 0
-					elif sePuede == 1:
-						if worker2 not in O[jobsOrders[contJob]]:
-							sePuede == 1
-						else:
-							sePuede = 0						
-					elif sePuede == 0:
+					if worker2 not in O[jobsOrders[contJob]]:
+						sePuede = 1	
+					else:
+						sePuede = 0
 						break
-
 				if sePuede == 1:
 					rAux[worker].append(jobsOrders[contJob])
 					break
 		print('RAUX ES: ', rAux)
+		if sePuede == 0:
+			jobsAux.append(jobsOrders[contJob])
+			employerRandom = random.randrange(len(P[jobsOrders[contJob]]))
+			print(employerRandom)
 		
-
-
 
 
 			#if jobsOrders[contJob] not in rAux[worker] and worker in P[jobsOrders[contJob]]:
