@@ -74,17 +74,16 @@ def getHourInit(jobs):
 #Entrada: S vector con las horas de inicio, O vector con las tareas superpuestas de j,
 #P vector con los empleados calificados para trabajo j, R vector con los trabajos asignados al trabajador w
 #Salida: vector con una solucion factible
-def constructiveHeuristic(S, O, P, R):
+def constructiveHeuristic(S, O, P, R, E):
 	jobsOrders = orderList(S, P)
 	jobsOrdersAux = orderList(S, P)
 	jobsAux = []
-	print('lista ordenada', jobsOrders)
+	print('\nlista ordenada', jobsOrders)
 	contJob = 0
 	rAux = list()
-	for i in range(len(P)):
+	for i in range(E):
 		rAux.append(list())
-	#print('P es: ', P)
-	#print('O es: ', O)
+	print("'R es:", rAux)
 	while len(jobsOrdersAux) > 0:
 		jobsOrdersAux.pop(0)
 		sePuede = -1
@@ -103,35 +102,20 @@ def constructiveHeuristic(S, O, P, R):
 				if sePuede == 1:
 					rAux[worker].append(jobsOrders[contJob])
 					break
-		print('RAUX ES: ', rAux)
+		
 		if sePuede == 0:
 			jobsAux.append(jobsOrders[contJob])
 			employerRandom = random.randrange(len(P[jobsOrders[contJob]]))
 			print(employerRandom)
 		
-
-
-			#if jobsOrders[contJob] not in rAux[worker] and worker in P[jobsOrders[contJob]]:
-				#print('entro aca?')
-			#	if len(rAux[worker]) == 0:
-					#print('el job es:', jobsOrders[contJob])
-					#print('O es:', O[jobsOrders[contJob]])
-			#		rAux[worker].append(jobsOrders[contJob])
-					#print('R1 es', rAux)
-			#		break
-			#	else:
-					#print('el job es:', jobsOrders[contJob])
-					#print('O es:', O[jobsOrders[contJob]])
-			#		for job in rAux[worker]:
-			#			if jobsOrders[contJob] not in O[worker]:
-			#				rAux[worker].append(jobsOrders[contJob])
-						#print('R2 es ', rAux, 'cont es:', contJob)
-			#				break
 		
 		contJob = contJob + 1
 		
 		#print(rAux)
-	
+	print('\ntrabajos asignados: ', rAux)
+	print('\ntrabajos sin asignar:', jobsAux)
+	return rAux, jobsAux
+
 
 
 #Descripcion: permite obtener los trabajos superpuestos entre si

@@ -18,7 +18,7 @@ def main():
 	S = getHourInit(jobs)
 	O = constructiveO(jobs)
 	P = getEmployersCalificatesInJobs(jobsCalificate, len(jobs))
-	constructiveHeuristic(S, O, P, R)
+	constructiveHeuristic(S, O, P, R, len(jobsCalificate))
 
 
 	
