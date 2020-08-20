@@ -3,6 +3,7 @@ import numpy as np
 import copy
 from time import time
 from generateNeighborhood import generatingNeighborhood, jobsForEachWoker
+import matplotlib.pyplot as plt
 
 def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha, initial, totalWorker, LTC, O,totalJobs):
     #solucion initial aleatoria
