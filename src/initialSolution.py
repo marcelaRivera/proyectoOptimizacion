@@ -1,4 +1,5 @@
 import random
+from generateNeighborhood import test
 
 #Descripcion: funcion que permite calcular la cantidad de trabajadores que pueden realizar
 #el trabajo i. Con i = 0,...., cantidad de trabajos totales
@@ -40,22 +41,17 @@ def getEmployersCalificatesInJobs(jobsCalificate, jobs):
 #Donde Sj corresponde a la hora de inicio de la tarea j y Pj indica la cantidad de personas que pueden hacr la tarea j
 #Entrada: vector con hora de inicio y fin de la tarea i. Vector con los trabajadores que pueden hacer la tarea j
 #Salida: vector con trabajos ordenados segun el criterio Sj+Pj. En cada posicion del arreglo se tiene el 
-#identificador #de la tarea
+#identificador de la tarea
 def orderList(jobs, jobsOrder):
 	hoursInitTuple = []  #vector que contiene la suma Sj+Pj, Identificdor de la tarea (j)
-	hourInitId = []  #vector que contiene la suma Sj + Pj, este es el vector que se ordena de forma ascendente
 	hourInitIdFinal = []  #vector que contiene los identificadores ordenados de forma ascendente según Sj+Pj
 	j = 0
 	for i in jobs:
-		hoursInitTuple.append([i + len(jobsOrder[j]), j, i, len(jobsOrder[j])])
-		hourInitId.append(i + len(jobsOrder[j]))
+		hoursInitTuple.append([i + len(jobsOrder[j]), j])
 		j = j + 1
-	hourInitId.sort()
-	for i in hourInitId:
-		for j in hoursInitTuple:
-			if i == j[0] and (i-j[3]) == j[2]:
-				if j[1] not in hourInitIdFinal:
-					hourInitIdFinal.append(j[1])
+	hoursInitTuple.sort(key = lambda x : x[0])
+	for element in hoursInitTuple:
+		hourInitIdFinal.append(element[1])
 				
 	return hourInitIdFinal
 
@@ -78,44 +74,84 @@ def constructiveHeuristic(S, O, P, R, E):
 	jobsOrders = orderList(S, P)
 	jobsOrdersAux = orderList(S, P)
 	jobsAux = []
-	print('\nlista ordenada', jobsOrders)
 	contJob = 0
 	rAux = list()
+	
 	for i in range(E):
 		rAux.append(list())
-	print("'R es:", rAux)
+
 	while len(jobsOrdersAux) > 0:
-		jobsOrdersAux.pop(0)
-		sePuede = -1
-		for worker in P[jobsOrders[contJob]]:
-			if len(rAux[worker]) == 0:
-				rAux[worker].append(jobsOrders[contJob])
-				sePuede = 1
+		isPossible = -1 
+		elementNow = jobsOrdersAux[0]
+		for worker in P[jobsOrders[elementNow]]:
+			if len(rAux[worker]) == 0 :
+				rAux[worker].append([jobsOrders[elementNow],elementNow])
+				jobsOrdersAux.pop(0)
 				break
 			else:
-				for worker2 in rAux[worker]:
-					if worker2 not in O[jobsOrders[contJob]]:
-						sePuede = 1	
-					else:
-						sePuede = 0
-						break
-				if sePuede == 1:
-					rAux[worker].append(jobsOrders[contJob])
-					break
-		
-		if sePuede == 0:
-			jobsAux.append(jobsOrders[contJob])
-			employerRandom = random.randrange(len(P[jobsOrders[contJob]]))
-			print(employerRandom)
-		
-		
-		contJob = contJob + 1
-		
-		#print(rAux)
-	print('\ntrabajos asignados: ', rAux)
-	print('\ntrabajos sin asignar:', jobsAux)
-	return rAux, jobsAux
+				auxRandom = random.randint(0,len(P[elementNow])-1)
+				worker = P[elementNow][auxRandom]
+				isPossible = addingNewElement(rAux[worker],elementNow,O,jobsOrders)
 
+				if isPossible == 1:
+					rAux[worker].append([jobsOrders[elementNow],elementNow])
+					jobsOrdersAux.pop(0)
+					break
+				else:
+					listOldRAux = rAux[worker]
+					listNew = []
+					listNew.append(elementNow)
+					jobsOrdersAux.pop(0)
+					rAux[worker] = []
+					rAux[worker].append([jobsOrders[elementNow],elementNow])
+
+					for x in listOldRAux:
+						isPossible = addingNewElement(rAux[worker],x[1],O,jobsOrders)
+						if isPossible == 1:
+							rAux[worker].append([x[0],x[1]])
+						else:
+							jobsOrdersAux.append(x[1])
+					break
+	return test(rAux,len(S))
+
+def addingNewElementWhenHaveConflict(listOld, rAux, O,jobsOrdersAux):
+
+	isPossible = 0
+	if len(listOld) == 0:
+		return 1
+	for elementAux in listOld:
+		isPossible = addingNewElementWithConflict(rAux,elementAux,O)
+		if isPossible == 1:
+			rAux.append(elementAux)
+		else:
+			jobsOrdersAux.append(elementAux)
+	return rAux, jobsOrdersAux, 0
+
+
+def addingNewElement(listActual, elementToAdd,O,jobsOrders):
+	isPossible = 0
+	if len(listActual) == 0:
+		return 1
+	for job in listActual:
+		isPossible = isPossibleToAdd(job[0],O[jobsOrders[elementToAdd]])
+	if isPossible == 1:
+		return 1
+	else:
+		return 0
+
+def addingNewElementWithConflict(listActual, elementToAdd,O):
+	isPossible = 0
+	for job in listActual:
+		isPossible = isPossibleToAdd(job,O[elementToAdd])
+	if isPossible == 1:
+		return 1
+	else:
+		return 0
+
+def isPossibleToAdd(elementToAdd, listReadyToCompare):
+	if elementToAdd in listReadyToCompare:
+		return 0
+	return 1
 
 
 #Descripcion: permite obtener los trabajos superpuestos entre si
