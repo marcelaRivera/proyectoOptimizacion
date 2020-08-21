@@ -5,7 +5,7 @@ from time import time
 from generateNeighborhood import generatingNeighborhood, jobsForEachWoker
 import matplotlib.pyplot as plt
 
-def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha, initial, totalWorker, LTC, O,totalJobs):
+def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWorker, LTC, O,totalJobs):
     #solucion initial aleatoria
     start_time = time()
     listWorkerCosto = [random.random() for i in range(len(LTC))]
@@ -14,6 +14,7 @@ def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha,
     mejorCosto = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
     mejorSolucion = copy.copy(initial)
     auxiiii = 0
+
     while(Tmax > Tmin):
 
         for i in range(iteracionesInternas):
@@ -38,8 +39,7 @@ def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha,
             else:
                 costos.append(costoOld)
         
-        if(tipoEnfriamiento == 2): #geométrico
-            Tmax = alpha*Tmax
+        Tmax = alpha*Tmax
 
     elapsed_time = time() - start_time
     print("Tiempo de respuesta: ", elapsed_time)
@@ -68,23 +68,23 @@ def funcionObjetivoWithCost(workersWithJobs,costoWork):
         aux = aux + 1
     return result
 
-def funcionObjetivoWithoutCost(workersWithJobs):
+def funcionObjetivoWithoutCost(workersWithJobs, LTC):
     result = 0
     aux = 0
     for listElement in workersWithJobs:
-        if len(listElement) != 0:
-            result = result + 1
+        if len(listElement) != 0: # [ [3] , []]
+            result = result + (1/len(LTC[aux]))
+        aux = aux + 1
     return result
 
 
-def simulatedAnneling(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha, initial, totalWorker, LTC, O,totalJobs):
+def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWorker, LTC, O,totalJobs):
     #solucion initial aleatoria
     start_time = time()
-    
 
     costos = []
     initialStart = copy.copy(initial)
-    mejorCosto = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker))
+    mejorCosto = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),LTC)
     mejorSolucion = copy.copy(initial)
     auxiiii = 0
     while(Tmax > Tmin):
@@ -95,12 +95,15 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha, 
 
             initialAux = copy.copy(initial)
             auxiiii = auxiiii + 1
-            costoOld = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker))
+            costoOld = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),LTC)
             initial_prima = generatingNeighborhood(initial, LTC, totalJobs, O)
-            costoNew = funcionObjetivoWithoutCost(jobsForEachWoker(initial_prima,totalWorker))
+            costoNew = funcionObjetivoWithoutCost(jobsForEachWoker(initial_prima,totalWorker),LTC)
             error = costoNew - costoOld 
 
             if(error < 0):
+                #print(initial)
+                #print(initial_prima)
+                #input("")
                 initial = copy.copy(initial_prima) 
                 if (mejorCosto > costoNew):
                     mejorCosto = copy.copy(costoNew) 
@@ -108,15 +111,21 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, tipoEnfriamiento, alpha, 
                 costos.append(costoNew)
                 
             elif(random.random() < random.random()):
-                print("aca")
-                initial = copy.copy(initialAux) 
-                print("EL costo es: " + str(costoNew))
+                #print("aca")
+                #print(initial)
+                #print(initial_prima)
+                #input("")
+                #print("********")
+                initial = copy.copy(initial_prima) 
+                #print(initial)
+                #print(initial_prima)
+                #input("")
+                #print("EL costo es: " + str(costoNew))
                 costos.append(costoNew)
             else: 
                 costos.append(costoOld)
             
-        if(tipoEnfriamiento == 2): #geométrico
-            Tmax = alpha*Tmax
+        Tmax = alpha*Tmax
     
     elapsed_time = time() - start_time
     print("Tiempo de respuesta: ", elapsed_time)

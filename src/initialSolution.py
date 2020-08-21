@@ -112,8 +112,9 @@ def constructiveHeuristic(S, O, P, R, E):
 						else:
 							jobsOrdersAux.append(x[1])
 					break
-	return test(rAux,len(S))
+	return test(rAux,len(S))   
 
+"""
 def addingNewElementWhenHaveConflict(listOld, rAux, O,jobsOrdersAux):
 
 	isPossible = 0
@@ -126,7 +127,7 @@ def addingNewElementWhenHaveConflict(listOld, rAux, O,jobsOrdersAux):
 		else:
 			jobsOrdersAux.append(elementAux)
 	return rAux, jobsOrdersAux, 0
-
+"""
 
 def addingNewElement(listActual, elementToAdd,O,jobsOrders):
 	isPossible = 0
@@ -138,7 +139,7 @@ def addingNewElement(listActual, elementToAdd,O,jobsOrders):
 		return 1
 	else:
 		return 0
-
+"""
 def addingNewElementWithConflict(listActual, elementToAdd,O):
 	isPossible = 0
 	for job in listActual:
@@ -147,6 +148,7 @@ def addingNewElementWithConflict(listActual, elementToAdd,O):
 		return 1
 	else:
 		return 0
+"""
 
 def isPossibleToAdd(elementToAdd, listReadyToCompare):
 	if elementToAdd in listReadyToCompare:

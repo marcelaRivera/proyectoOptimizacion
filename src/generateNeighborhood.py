@@ -9,7 +9,7 @@ def generatingNeighborhood(initialSolution, LTC, total, O):
 	
 	listWorker = [i for i in range(len(LTC))]
 
-	listCantWorkerSelect = selectWorker(cantWorkerSelect,initialSolution,len(LTC))
+	listCantWorkerSelect = selectWorkerEmpty(cantWorkerSelect,initialSolution,len(LTC))
 	listCantWorkerNotSelect = list(set(listWorker)-set(listCantWorkerSelect))
 	listJobsForEachWoker = jobsForEachWoker(initialSolution,len(LTC))
 	isPossible = 0
@@ -17,17 +17,16 @@ def generatingNeighborhood(initialSolution, LTC, total, O):
 	for worker in listCantWorkerSelect:
 		for jobs in listJobsForEachWoker[worker]:
 			for workerAux in listCantWorkerNotSelect:
-				if (worker != workerAux):
-					for jobsAux in listJobsForEachWoker[workerAux]:
-						if jobs not in O[jobsAux]:
-							isPossible = 1
-						else:
-							isPossible = 0
-							break
-					if isPossible == 1:
-						initialSolution[jobs] = workerAux
-						listJobsForEachWoker = jobsForEachWoker(initialSolution,len(LTC))
+				for jobsAux in listJobsForEachWoker[workerAux]:
+					if jobs not in O[jobsAux]:
+						isPossible = 1
+					else:
 						isPossible = 0
+						break
+				if isPossible == 1:
+					initialSolution[jobs] = workerAux
+					listJobsForEachWoker = jobsForEachWoker(initialSolution,len(LTC))
+					isPossible = 0
 	return initialSolution
 
 def selectWorker(cantWorkerSelect, initialSolution, large):

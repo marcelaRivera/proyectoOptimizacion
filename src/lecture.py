@@ -6,8 +6,8 @@ def readFile():
 	jobsCalificate = []
 
 	#file = open("../dataset/data_1_23_40_66.dat", 'r')
-	#file = open("../dataset/data_21_93_175_33.dat", 'r')
-	file = open("../dataset/data_124_198_1383_33.dat", 'r')
+	file = open("../dataset/data_21_93_175_33.dat", 'r')
+	#file = open("../dataset/data_124_198_1383_33.dat", 'r')
 	
 	for aux in file:
 		if ("Jobs" in aux):
