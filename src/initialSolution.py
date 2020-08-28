@@ -83,8 +83,8 @@ def constructiveHeuristic(S, O, P, R, E):
 	while len(jobsOrdersAux) > 0:
 		isPossible = -1 
 		elementNow = jobsOrdersAux[0]
-		for worker in P[jobsOrders[elementNow]]:
-			if len(rAux[worker]) == 0 :
+		for worker in P[elementNow]:
+			if len(rAux[worker]) == 0:
 				rAux[worker].append([jobsOrders[elementNow],elementNow])
 				jobsOrdersAux.pop(0)
 				break
@@ -134,7 +134,9 @@ def addingNewElement(listActual, elementToAdd,O,jobsOrders):
 	if len(listActual) == 0:
 		return 1
 	for job in listActual:
-		isPossible = isPossibleToAdd(job[0],O[jobsOrders[elementToAdd]])
+		isPossible = isPossibleToAdd(job,O[elementToAdd])
+		if isPossible == 0:
+			break
 	if isPossible == 1:
 		return 1
 	else:

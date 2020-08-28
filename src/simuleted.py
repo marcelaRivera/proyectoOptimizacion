@@ -12,6 +12,9 @@ def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWor
     costos = []
     initialAux = copy.copy(initial)
     mejorCosto = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
+    print("el costo es:",mejorCosto)
+    print("los costos son:",listWorkerCosto)
+    input()
     mejorSolucion = copy.copy(initial)
     auxiiii = 0
 
@@ -85,6 +88,8 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
     costos = []
     initialStart = copy.copy(initial)
     mejorCosto = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),LTC)
+    print("el costo es:",mejorCosto)
+    input()
     mejorSolucion = copy.copy(initial)
     auxiiii = 0
     while(Tmax > Tmin):
