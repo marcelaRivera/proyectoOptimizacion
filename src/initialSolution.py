@@ -85,33 +85,55 @@ def constructiveHeuristic(S, O, P, R, E):
 		elementNow = jobsOrdersAux[0]
 		for worker in P[elementNow]:
 			if len(rAux[worker]) == 0:
-				rAux[worker].append([jobsOrders[elementNow],elementNow])
+				rAux[worker].append(elementNow)
 				jobsOrdersAux.pop(0)
+				verificador = 1
 				break
 			else:
-				auxRandom = random.randint(0,len(P[elementNow])-1)
-				worker = P[elementNow][auxRandom]
+				#auxRandom = random.randint(0,len(P[elementNow])-1)
+				#worker = P[elementNow][auxRandom]
 				isPossible = addingNewElement(rAux[worker],elementNow,O,jobsOrders)
-
 				if isPossible == 1:
-					rAux[worker].append([jobsOrders[elementNow],elementNow])
+					rAux[worker].append(elementNow)
 					jobsOrdersAux.pop(0)
+					verificador = 1
 					break
 				else:
-					listOldRAux = rAux[worker]
-					listNew = []
-					listNew.append(elementNow)
-					jobsOrdersAux.pop(0)
-					rAux[worker] = []
-					rAux[worker].append([jobsOrders[elementNow],elementNow])
+					verificador = 0
 
-					for x in listOldRAux:
-						isPossible = addingNewElement(rAux[worker],x[1],O,jobsOrders)
-						if isPossible == 1:
-							rAux[worker].append([x[0],x[1]])
-						else:
-							jobsOrdersAux.append(x[1])
-					break
+		if verificador == 0:
+			listOldRAux = rAux[worker]
+			listNew = []
+			listNew.append(elementNow)
+			jobsOrdersAux.pop(0)
+			rAux[worker] = []
+			rAux[worker].append(elementNow)
+			for x in listOldRAux:
+				isPossible = addingNewElement(rAux[worker],elementNow,O,jobsOrders)
+				if isPossible == 1:
+					rAux[worker].append(elementNow)
+				else:
+					jobsOrdersAux.append(elementNow)
+			break  
+
+
+					#print(verificador)
+					#listOldRAux = rAux[worker]
+					#listNew = []
+					#listNew.append(elementNow)
+					#jobsOrdersAux.pop(0)
+					#rAux[worker] = []
+					#rAux[worker].append(elementNow)
+
+					#for x in listOldRAux:
+					#	isPossible = addingNewElement(rAux[worker],elementNow,O,jobsOrders)
+					#	if isPossible == 1:
+					#		rAux[worker].append(elementNow)
+					#	else:
+					#		jobsOrdersAux.append(elementNow)
+					#break  
+	#return rAux
+	print('raux inicial', rAux)
 	return test(rAux,len(S))   
 
 """

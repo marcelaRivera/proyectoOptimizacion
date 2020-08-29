@@ -65,7 +65,7 @@ def test (listEntry, total):
 	worker = 0
 	for aux in listEntry:
 		for jobs in aux:
-			initial[jobs[1]] = worker
+			initial[jobs] = worker
 		worker = worker + 1
 	return initial
 

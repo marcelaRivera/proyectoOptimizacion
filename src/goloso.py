@@ -31,34 +31,37 @@ def goloso(S, O, P, R, E, LTC):
 		contAux = 0
 		verificar = -1
 		elementNow = jobsOrdersAux[0]
+		costWorkersCalificates = []
+		rAux2 = []
 		for worker in P[elementNow]:
+			#print('p es: ', P[elementNow])
 			costWorkersCalificates.append(listWorkerCost[worker])
 			rAux2.append(rAux[worker])
 			workers.append(worker)
 			#print('los trabajadores calificados son: ', P[elementNow])
 			#input()
-		totalCostWorkersCalificatesOrder = minCost(rAux2, costWorkersCalificates, workers)
-		#print('todos los costos son: ', listWorkerCost)
-		for worker in totalCostWorkersCalificatesOrder:
-			if len(rAux[worker[2]]) == 0:
-				rAux[worker[2]].append(elementNow)
+		totalCostWorkersCalificatesOrder = minCost(rAux2, costWorkersCalificates, P[elementNow])
+		#print('todos los costos son: ', totalCostWorkersCalificatesOrder)
+		for worker2 in totalCostWorkersCalificatesOrder:
+			print(worker2)
+			if len(rAux[worker2[2]]) == 0:
+				rAux[worker2[2]].append(elementNow)
 				#print('Raux es: ', rAux)
 				#input()
 				jobsOrdersAux.pop(0)
-				break
-				
+				break				
 			else:
-				isPossible = addingNewElement(rAux[worker[2]],elementNow,O,jobsOrders)
+				isPossible = addingNewElement(rAux[worker2[2]],elementNow,O,jobsOrders)
 				if isPossible == 1:
-					rAux[worker[2]].append(elementNow)
+					rAux[worker2[2]].append(elementNow)
 					jobsOrdersAux.pop(0)
 					break
 				else:
 					verificar = 0
-
-		#if verificar == 0:
-		print('Raux es: ', rAux)
-
+		if verificar == 0:
+			print('trabajo sin asignar', elementNow)
+	print('Raux es: ', rAux)
+	print('O es: ', O)
 				
 
 def minCost(workersWithJobs,costWork, workers):

@@ -21,8 +21,8 @@ def main():
 	O = constructiveO(jobs)
 	#print(O)
 	P = getEmployersCalificatesInJobs(jobsCalificate, len(jobs))
-	#entrada = constructiveHeuristic(S, O, P, R, len(jobsCalificate))
-	#print(entrada)
+	entrada = constructiveHeuristic(S, O, P, R, len(jobsCalificate))
+	print(entrada)
 	#print("Largo maximo" + str(len(entrada)))
 	#print("NUmero maximo es: " + str(max(entrada)))
 	#print("NUmero minimo es: " + str(min(entrada)))
@@ -32,9 +32,9 @@ def main():
 	#input("stop")
 	# simuleted
 
-	#input("simuleted")
-	#salidaSimuleted = simulatedAnneling2(100,1,400,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs))
-	#print(salidaSimuleted)
+	input("simuleted")
+	salidaSimuleted = simulatedAnneling2(100,1,100,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs))
+	print(salidaSimuleted)
 	input("goloso")
 	goloso(S, O, P, R, len(jobsCalificate), jobsCalificate)
 main()
