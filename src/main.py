@@ -1,7 +1,7 @@
 from lecture import readFile
 from initialSolution import getHourInit, constructiveO, getEmployersCalificatesInJobs, constructiveHeuristic
 from generateNeighborhood import generatingNeighborhood
-from simuleted import simulatedAnneling, simulatedAnneling2
+from simuleted import simulatedAnneling, simulatedAnneling2, funcionObjetivoWithCost
 from goloso import goloso, minCost
 
 def main():
@@ -35,6 +35,6 @@ def main():
 	input("simuleted")
 	salidaSimuleted = simulatedAnneling2(100,1,100,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs))
 	print(salidaSimuleted)
-	input("goloso")
-	goloso(S, O, P, R, len(jobsCalificate), jobsCalificate)
+	#input("goloso")
+	#goloso(S, O, P, R, len(jobsCalificate), jobsCalificate)
 main()

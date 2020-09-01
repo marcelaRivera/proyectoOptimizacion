@@ -4,58 +4,49 @@ import copy
 from time import time
 from generateNeighborhood import generatingNeighborhood, jobsForEachWoker
 import matplotlib.pyplot as plt
+import math
 
 def simulatedAnneling2(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWorker, LTC, O,totalJobs):
     #solucion initial aleatoria
     start_time = time()
     listWorkerCosto = [random.random() for i in range(len(LTC))]
     costos = []
-    initialAux = copy.copy(initial)
     mejorCosto = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
-    print("el costo es:",mejorCosto)
-    print("los costos son:",listWorkerCosto)
-    input()
+    costoActual = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
     mejorSolucion = copy.copy(initial)
+    actualSolucion = copy.copy(initial)
+    Tact = copy.copy(Tmax)
     auxiiii = 0
 
-    while(Tmax > Tmin):
-
+    while(Tact > Tmin):
         for i in range(iteracionesInternas):
-            if (auxiiii % 10) == 0 :
+            if (auxiiii % 1000) == 0 :
                 print("Vamos en la itaracion: " + str(auxiiii))
             auxiiii = auxiiii + 1
-            costoOld = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
-            initial_prima = generatingNeighborhood(initial, LTC, totalJobs, O)
-            costoNew = funcionObjetivoWithCost(jobsForEachWoker(initial_prima,totalWorker),listWorkerCosto)
-            error = costoNew - costoOld
+            
+            print(actualSolucion)
+            initial_prima = copy.copy(generatingNeighborhood(actualSolucion, LTC, totalJobs, O))
+            print(initial_prima)
+            input("aca")
+            costoNew = copy.copy(funcionObjetivoWithCost(jobsForEachWoker(initial_prima,totalWorker),listWorkerCosto))
+            error = costoNew - costoActual
 
-            if(error < 0):
-                initial = copy.copy(initial_prima)
+            if error <= 0:
+                costoActual = copy.copy(costoNew)
+                actualSolucion = copy.copy(initial_prima)
                 if (mejorCosto > costoNew):
-                    mejorCosto = costoNew
-                    mejorSolucion = copy.copy(initial)
-                costos.append(costoNew)
+                    mejorCosto = copy.copy(costoNew)
+                    mejorSolucion = copy.copy(initial_prima)
                 
-            elif(random.random() < np.exp(-float(error)/Tmax)):
-                initial = copy.copy(initial_prima)
-                costos.append(costoNew)
-            else:
-                costos.append(costoOld)
+            elif random.random() < (math.e**(-(error)/Tact)):
+                costoActual = copy.copy(costoNew)
+                actualSolucion = copy.copy(initial_prima)
+            
+            costos.append(costoActual)
         
-        Tmax = alpha*Tmax
+        Tact = alpha*Tact
 
     elapsed_time = time() - start_time
-    print("Tiempo de respuesta: ", elapsed_time)
-    print("La inicial")
-    print(jobsForEachWoker(initialAux,totalWorker))
-    print("La mejorada")
-    print(jobsForEachWoker(mejorSolucion,totalWorker))
-    print("costo")
-    print(costos)
-    print("Costo de la mejor slucion es: ")
-    print(funcionObjetivoWithCost(jobsForEachWoker(mejorSolucion,totalWorker),listWorkerCosto))
-    print("Los costos de los trabajdores ")
-    print(listWorkerCosto)
 
     plt.plot(costos)
     plt.ylabel("Costos")
