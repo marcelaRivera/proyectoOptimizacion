@@ -38,8 +38,8 @@ def main():
 			print("Opcion 1")
 
 		elif opcion == "2" and jobs is not None and jobsCalificate is not None:
-			costo,solucion, tiempo = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
-			print("Opcion 2", '\ncosto: ', costo, '\n solucion: ', solucion, '\n tiempo: ', tiempo)
+			costo,solucion, tiempo, cantidadTrabajadores = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
+			print("Opcion 2", '\ncosto: ', costo, '\n solucion: ', solucion, '\n tiempo: ', tiempo, 'cant trabajadores: ', cantidadTrabajadores)
 
 		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
 			print(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto))

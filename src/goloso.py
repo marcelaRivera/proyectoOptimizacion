@@ -29,6 +29,7 @@ def goloso(S, O, P, R, E, LTC, listWorkerCost, repeat, totalWorker):
 	for count in range(repeat):
 		start_time = time()
 		costos = []
+		cantTrabajadores = 0
 		jobsOrdersAux = orderList(S, P)
 		rAux = list()
 		for i in range(E):
@@ -50,6 +51,7 @@ def goloso(S, O, P, R, E, LTC, listWorkerCost, repeat, totalWorker):
 				if len(rAux[worker2[2]]) == 0:
 					rAux[worker2[2]].append(elementNow)
 					verificar = 1
+					cantTrabajadores = cantTrabajadores + 1
 					jobsOrdersAux.pop(0)
 					break				
 				else:
@@ -67,8 +69,8 @@ def goloso(S, O, P, R, E, LTC, listWorkerCost, repeat, totalWorker):
 		globalTime = time() - start_time
 		mejorSolucionGlobal = test(rAux, len(S))
 		globalCost = funcionObjetivoWithCost(jobsForEachWoker(mejorSolucionGlobal, totalWorker), listWorkerCost)
-		
-	return globalCost, mejorSolucionGlobal, globalTime  
+		print('r aux es del goloso: ', rAux)
+	return globalCost, mejorSolucionGlobal, globalTime, cantTrabajadores
 				
 
 def minCost(workersWithJobs,costWork, workers):
