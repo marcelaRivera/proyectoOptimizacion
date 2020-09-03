@@ -16,6 +16,8 @@ def main():
 	S = None #horas de inicio de cada trabajo 
 	entrada = None
 	listOfCost = None
+	listWorkerCosto = None
+	iteraciones = 11
 
 	while opcion != 4:
 
@@ -32,14 +34,14 @@ def main():
 			O = constructiveO(jobs)
 			P = getEmployersCalificatesInJobs(jobsCalificate, len(jobs))
 			entrada = constructiveHeuristic(S, O, P, R, len(jobsCalificate))
+			listWorkerCosto = [random.random() for i in range(len(jobsCalificate))]
 			print("Opcion 1")
 
 		elif opcion == "2" and jobs is not None and jobsCalificate is not None:
-			goloso(S, O, P, R, len(jobsCalificate), jobsCalificate)
-			print("Opcion 2")
+			costo,solucion, tiempo = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
+			print("Opcion 2", '\ncosto: ', costo, '\n solucion: ', solucion, '\n tiempo: ', tiempo)
 
 		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
-			listWorkerCosto = [random.random() for i in range(len(jobsCalificate))]
 			print(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto))
 			globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA = simulatedAnneling(int(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto)/2),10,100,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,1)
 			print("Opcion 3")

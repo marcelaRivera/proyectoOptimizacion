@@ -1,67 +1,74 @@
 import random
 import copy
-from generateNeighborhood import test
+from time import time
+from generateNeighborhood import test, jobsForEachWoker
 from initialSolution import orderList, addingNewElement
-
+from simuleted import funcionObjetivoWithCost, jobsForEachWoker
 #Descripcion: funcion que permite construir una solucion factible utilizando un criterio goloso
 #Entrada: S vector con las horas de inicio, O vector con las tareas superpuestas de j,
 #P vector con los empleados calificados para trabajo j, R vector con los trabajos asignados al trabajador w
 #Salida: vector con una solucion factible
-def goloso(S, O, P, R, E, LTC):
+def goloso(S, O, P, R, E, LTC, listWorkerCost, repeat, totalWorker):
+
 	jobsOrders = orderList(S, P)
 	jobsOrdersAux = orderList(S, P)
 	print(jobsOrders)
-	listWorkerCost = [random.random() for i in range(len(LTC))]
 	costWorkersCalificates = []
-	totalCostWorkersCalificates = []
 	totalCostWorkersCalificatesOrder = []
 	jobsAux = []
 	workers = []
 	costCurrent = []
 	verificar = 0
 	costMin = 0.0
-	rAux = list()
 	rAux2 = list()
 	pos = 0
-	
-	for i in range(E):
-		rAux.append(list())
-	while len(jobsOrdersAux) > 0:
-		isPossible = -1 
-		contAux = 0
-		verificar = -1
-		elementNow = jobsOrdersAux[0]
-		costWorkersCalificates = []
-		rAux2 = []
-		for worker in P[elementNow]:
-			#print('p es: ', P[elementNow])
-			costWorkersCalificates.append(listWorkerCost[worker])
-			rAux2.append(rAux[worker])
-			workers.append(worker)
-			#print('los trabajadores calificados son: ', P[elementNow])
-			#input()
-		totalCostWorkersCalificatesOrder = minCost(rAux2, costWorkersCalificates, P[elementNow])
-		#print('todos los costos son: ', totalCostWorkersCalificatesOrder)
-		for worker2 in totalCostWorkersCalificatesOrder:
-			print(worker2)
-			if len(rAux[worker2[2]]) == 0:
-				rAux[worker2[2]].append(elementNow)
-				#print('Raux es: ', rAux)
-				#input()
-				jobsOrdersAux.pop(0)
-				break				
-			else:
-				isPossible = addingNewElement(rAux[worker2[2]],elementNow,O,jobsOrders)
-				if isPossible == 1:
+	globalCost = 0
+	globalTime = 0
+	mejorSolucionGlobal = 0
+
+	for count in range(repeat):
+		start_time = time()
+		costos = []
+		jobsOrdersAux = orderList(S, P)
+		rAux = list()
+		for i in range(E):
+			rAux.append(list())
+		while len(jobsOrdersAux) > 0:
+			isPossible = -1 
+			contAux = 0
+			verificar = -1
+			elementNow = jobsOrdersAux[0]
+			costWorkersCalificates = []
+			rAux2 = []
+			for worker in P[elementNow]:
+				costWorkersCalificates.append(listWorkerCost[worker])
+				rAux2.append(rAux[worker])
+				workers.append(worker)
+				verificar = 1
+			totalCostWorkersCalificatesOrder = minCost(rAux2, costWorkersCalificates, P[elementNow])
+			for worker2 in totalCostWorkersCalificatesOrder:
+				if len(rAux[worker2[2]]) == 0:
 					rAux[worker2[2]].append(elementNow)
+					verificar = 1
 					jobsOrdersAux.pop(0)
-					break
+					break				
 				else:
-					verificar = 0
-		if verificar == 0:
-			print('trabajo sin asignar', elementNow)
-	print('Raux es: ', rAux)
-	print('O es: ', O)
+					isPossible = addingNewElement(rAux[worker2[2]],elementNow,O,jobsOrders)
+					if isPossible == 1:
+						rAux[worker2[2]].append(elementNow)
+						jobsOrdersAux.pop(0)
+						verificar = 1
+						break
+					else:
+						verificar = 0
+			if verificar == 0:
+				print('trabajo sin asignar', elementNow)
+
+		globalTime = time() - start_time
+		mejorSolucionGlobal = test(rAux, len(S))
+		globalCost = funcionObjetivoWithCost(jobsForEachWoker(mejorSolucionGlobal, totalWorker), listWorkerCost)
+		
+	return globalCost, mejorSolucionGlobal, globalTime  
 				
 
 def minCost(workersWithJobs,costWork, workers):
