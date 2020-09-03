@@ -1,8 +1,9 @@
 from lecture import readFile
 from initialSolution import getHourInit, constructiveO, getEmployersCalificatesInJobs, constructiveHeuristic
-from generateNeighborhood import generatingNeighborhood
-from simuleted import simulatedAnneling, simulatedAnneling2, funcionObjetivoWithCost
+from generateNeighborhood import generatingNeighborhood, test
+from simuleted import simulatedAnneling, funcionObjetivoWithCost,jobsForEachWoker 
 from goloso import goloso, minCost
+import random
 
 def main():
 
@@ -33,12 +34,14 @@ def main():
 			entrada = constructiveHeuristic(S, O, P, R, len(jobsCalificate))
 			print("Opcion 1")
 
-		elif opcion == "2" and jobs is not None or jobsCalificate is not None:
+		elif opcion == "2" and jobs is not None and jobsCalificate is not None:
 			goloso(S, O, P, R, len(jobsCalificate), jobsCalificate)
 			print("Opcion 2")
 
-		elif opcion == "3" and jobs is not None or jobsCalificate is not None:
-			salidaSimuleted = simulatedAnneling2(100,1,100,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs))
+		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
+			listWorkerCosto = [random.random() for i in range(len(jobsCalificate))]
+			print(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto))
+			globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA = simulatedAnneling(int(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto)/2),10,100,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,1)
 			print("Opcion 3")
 		
 		elif opcion == "4":
