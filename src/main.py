@@ -44,8 +44,13 @@ def main():
 			print("Opcion 1")
 
 		elif opcion == "2" and jobs is not None and jobsCalificate is not None:
+<<<<<<< HEAD
 			costo, solucion, tiempo = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
 			writeOutGoloso(costo,solucion,tiempo,name[:8] + "_Goloso")
+=======
+			costo,solucion, tiempo, cantidadTrabajadores = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
+			print("Opcion 2", '\ncosto: ', costo, '\n solucion: ', solucion, '\n tiempo: ', tiempo, 'cant trabajadores: ', cantidadTrabajadores)
+>>>>>>> eadb35d545688a5e71b30ee7bf69070b0e11c90d
 
 		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
 			minTemp = 0.1
