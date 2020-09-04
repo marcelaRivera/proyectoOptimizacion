@@ -1,9 +1,10 @@
-from lecture import readFile
+from lecture import readFile, writeOutSA, writeOutGoloso, writeAnality
 from initialSolution import getHourInit, constructiveO, getEmployersCalificatesInJobs, constructiveHeuristic
 from generateNeighborhood import generatingNeighborhood, test
 from simuleted import simulatedAnneling, funcionObjetivoWithCost,jobsForEachWoker 
-from goloso import goloso, minCost
+from goloso import goloso
 import random
+import numpy as np
 
 def main():
 
@@ -29,7 +30,12 @@ def main():
 		opcion = input("Ingrese la opción: ")
 		print(opcion)
 		if opcion == "1":
-			jobs, jobsCalificate =  readFile()
+			name = "data_20_99_163_33.dat"
+			#name = "data_30_25_219_66.dat" # DB 1
+			#name = "data_39_45_351_66.dat" # DB 2
+			#name = "data_137_245_2105_33.dat" # DB 2
+
+			jobs, jobsCalificate =  readFile(name)
 			S = getHourInit(jobs)
 			O = constructiveO(jobs)
 			P = getEmployersCalificatesInJobs(jobsCalificate, len(jobs))
@@ -38,13 +44,20 @@ def main():
 			print("Opcion 1")
 
 		elif opcion == "2" and jobs is not None and jobsCalificate is not None:
-			costo,solucion, tiempo = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
-			print("Opcion 2", '\ncosto: ', costo, '\n solucion: ', solucion, '\n tiempo: ', tiempo)
+			costo, solucion, tiempo = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
+			writeOutGoloso(costo,solucion,tiempo,name[:8] + "_Goloso")
 
 		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
-			print(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto))
-			globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA = simulatedAnneling(int(funcionObjetivoWithCost(jobsForEachWoker(entrada,len(jobsCalificate)),listWorkerCosto)/2),10,100,0.99,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,1)
-			print("Opcion 3")
+			minTemp = 0.1
+			iteration = 10
+			alpha = 0.99
+			repeat = 1
+			simulatedAnneling(200,minTemp,iteration,alpha,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,repeat)
+			#print(str(costo))
+			#input("")
+			#globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA = simulatedAnneling(maxTemp,minTemp,iteration,alpha,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,repeat)
+			#writeAnality(globalCostSA,globalTimeSA,name[:8])
+			#writeOutSA(globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA, name[:8] + str(iteration) + "_" + str(alpha) + "" + str(iteration) + "_SA")
 		
 		elif opcion == "4":
 			print("Opcion 4")

@@ -47,14 +47,9 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 		listAux.append(globalBetterSolution[aux])
 		listAux.append(globalTime[aux])
 		dateComplete.append(listAux)
-
-	y = None
-	if len(x[0]) != 0:
-		y = len(x[0])-1
-	else:
-		y = len(x[0])
-
-	dateComplete.sort(key = lambda x : x[0][y])
+	print(dateComplete)
+	input("")
+	dateComplete.sort(key = lambda x : x[0][len(x[0])-1])
 
 	colors = ['black','red','gray','orange','gold','yellow','green','aqua','blue','indigo','pink']
 	count = 0
@@ -70,7 +65,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 	plt.legend(loc='best')
 	plt.show()
 
-	"""
+
 	for instancia in dateComplete[:11]:
 		plt.scatter(generation,instancia[0],c=colors[count],label="Iteración" + str(count+1),s=15)
 		count = count + 1
@@ -119,4 +114,4 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 	plt.xlabel("Repetición")
 	plt.legend(loc='best')
 	plt.show()	
-	"""
+	

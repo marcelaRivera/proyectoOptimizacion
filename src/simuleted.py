@@ -12,35 +12,34 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
     globalCost = []
     globalTime = []
     mejorSolucionGlobal = []
-    mejorCostoGlobal = []
+    mejorCostoGlobal = None
 
     for count in range(repeat):
         #solucion initial aleatoria
         start_time = time()
         costos = []
         listWorkerCosto = copy.copy(costWorks)
-        mejorCostoGlobal = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
-        mejorCosto = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
-        costoActual = funcionObjetivoWithCost(jobsForEachWoker(initial,totalWorker),listWorkerCosto)
+        mejorCostoGlobal = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O)
+        mejorCosto = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O)
+        costoActual = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O)
         mejorSolucion = copy.copy(initial)
         actualSolucion = copy.copy(initial)
         mejorSolucionGlobal = copy.copy(initial)
         Tact = copy.copy(Tmax)
-
+        count = 0
         while(Tact > Tmin):
+            if count % 10 == 0:
+                print(count)
+            count = count + 1
             for i in range(iteracionesInternas):
                 initial_prima = copy.copy(generatingNeighborhood(actualSolucion, LTC, totalJobs, O))
-                costoNew = copy.copy(funcionObjetivoWithCost(jobsForEachWoker(initial_prima,totalWorker),listWorkerCosto))
-                print(costoNew)
-                print(costoActual)
-                print(Tact)
-                print("\n")
-                #input("")
+                #costoNew = copy.copy(funcionObjetivoWithCost(jobsForEachWoker(initial_prima,totalWorker),listWorkerCosto))
+                costoNew = copy.copy(funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O))
                 error = costoNew - costoActual
-                if error <= 0:
+                if error < 0:
                     costoActual = copy.copy(costoNew)
                     actualSolucion = copy.copy(initial_prima)
-                    if (mejorCosto >= costoNew):
+                    if (mejorCosto > costoNew):
                         mejorSolucionGlobal = copy.copy(initial_prima)
                         mejorCostoGlobal = copy.copy(costoNew)
                         mejorCosto = copy.copy(costoNew)
@@ -53,7 +52,13 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
         elapsed_time = time() - start_time
         globalCost.append(costos)
         globalTime.append(elapsed_time)
-
+    print(mejorSolucionGlobal)
+    print("\n")
+    aux1 = jobsForEachWoker(initial,totalWorker)
+    print(aux1)
+    print("La cantidad de trabajadores es: ")
+    print(str(funcionObjetivoWithoutCostFinal(aux1)))
+    input("")
     graficarStatics(globalCost,globalTime,repeat)
     return globalCost, globalTime, mejorSolucionGlobal, mejorCostoGlobal
 
@@ -66,16 +71,25 @@ def funcionObjetivoWithCost(workersWithJobs,costoWork):
         aux = aux + 1
     return result
 
-"""
-def funcionObjetivoWithoutCost(workersWithJobs, LTC):
+
+def funcionObjetivoWithoutCostFinal(workersWithJobs):
     result = 0
     aux = 0
     for listElement in workersWithJobs:
-        if len(listElement) != 0: # [ [3] , []]
-            result = result + (1/len(LTC[aux]))
+        if len(listElement) != 0:
+            result = result + 1
         aux = aux + 1
     return result
 
+def funcionObjetivoWithoutCost(workersWithJobs, O):
+    result = 0
+    aux = 0
+    for listElement in workersWithJobs:
+        if len(listElement) != 0:
+            result = result + (len(listElement)/len(O[aux]))
+        aux = aux + 1
+    return result
+"""
 
 def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWorker, LTC, O,totalJobs):
     #solucion initial aleatoria
