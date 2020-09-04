@@ -30,9 +30,9 @@ def main():
 		opcion = input("Ingrese la opción: ")
 		print(opcion)
 		if opcion == "1":
-			name = "data_20_99_163_33.dat"
+			#name = "data_20_99_163_33.dat"
 			#name = "data_30_25_219_66.dat" # DB 1
-			#name = "data_39_45_351_66.dat" # DB 2
+			name = "data_39_45_351_66.dat" # DB 2
 			#name = "data_137_245_2105_33.dat" # DB 2
 
 			jobs, jobsCalificate =  readFile(name)
@@ -44,13 +44,8 @@ def main():
 			print("Opcion 1")
 
 		elif opcion == "2" and jobs is not None and jobsCalificate is not None:
-<<<<<<< HEAD
 			costo, solucion, tiempo = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
 			writeOutGoloso(costo,solucion,tiempo,name[:8] + "_Goloso")
-=======
-			costo,solucion, tiempo, cantidadTrabajadores = goloso(S, O, P, R, len(jobsCalificate), jobsCalificate, listWorkerCosto, iteraciones, len(jobsCalificate))
-			print("Opcion 2", '\ncosto: ', costo, '\n solucion: ', solucion, '\n tiempo: ', tiempo, 'cant trabajadores: ', cantidadTrabajadores)
->>>>>>> eadb35d545688a5e71b30ee7bf69070b0e11c90d
 
 		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
 			minTemp = 0.1
@@ -62,7 +57,7 @@ def main():
 			#input("")
 			#globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA = simulatedAnneling(maxTemp,minTemp,iteration,alpha,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,repeat)
 			#writeAnality(globalCostSA,globalTimeSA,name[:8])
-			#writeOutSA(globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA, name[:8] + str(iteration) + "_" + str(alpha) + "" + str(iteration) + "_SA")
+			writeOutSA(globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA, name[:8] + str(iteration) + "_" + str(alpha) + "" + str(iteration) + "_SA")
 		
 		elif opcion == "4":
 			print("Opcion 4")
