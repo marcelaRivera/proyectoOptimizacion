@@ -60,7 +60,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 	for instancia in dateComplete:
 		plt.scatter(generation,instancia[0],s=15)
 	plt.title("Totalidad de ejecuciones")
-	plt.ylabel("Costos")
+	plt.ylabel("Cantidad de trabajadores normalizado")
 	plt.xlabel("Iteraciones")
 	plt.legend(loc='best')
 	plt.show()
@@ -70,7 +70,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 		plt.scatter(generation,instancia[0],c=colors[count],label="Iteración" + str(count+1),s=15)
 		count = count + 1
 	plt.title("Los 11 mejores resultados")
-	plt.ylabel("Costos")
+	plt.ylabel("Cantidad de trabajadores normalizado")
 	plt.xlabel("Iteraciones")
 	plt.legend(loc='best')
 	plt.show()
@@ -80,7 +80,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 		plt.scatter(generation,instancia[0],c=colors[count],label="Iteración" + str(count+1),s=15)
 		count = count + 1
 	plt.title("Los 11 peores resultados")
-	plt.ylabel("Costos")
+	plt.ylabel("Cantidad de trabajadores normalizado")
 	plt.xlabel("Iteraciones")
 	plt.legend(loc='best')
 	plt.show()
@@ -90,7 +90,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 		plt.scatter(generation,instancia[0],c=colors[count],label="Iteración" + str(count+1),s=15)
 		count = count + 1
 	plt.title("Los 3 mejores resultados")
-	plt.ylabel("Costos")
+	plt.ylabel("Cantidad de trabajadores normalizado")
 	plt.xlabel("Iteraciones")
 	plt.legend(loc='best')
 	plt.show()
@@ -100,7 +100,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 		plt.scatter(generation,instancia[0],c=colors[count],label="Iteración" + str(count+1),s=15)
 		count = count + 1
 	plt.title("Los 3 peores resultados")
-	plt.ylabel("Costos")
+	plt.ylabel("Cantidad de trabajadores normalizado")
 	plt.xlabel("Iteraciones")
 	plt.legend(loc='best')
 	plt.show()

@@ -80,3 +80,11 @@ def writeAnality(globalCostSA,globalTimeSA,name):
 		file.write( "Tiempos/" + "Iteración " + str(count) + ": " + str(aux))
 		count = count + 1
 	file.close()
+
+"""
+def writeOutCost(globalCost,name):
+	file = open ( "Costos/Trabajadores/" + name + "_globlaCostWorkers.txt",'w')
+	for aux in globalCost:
+		file.write(str(aux) + " ")
+	file.close()
+"""

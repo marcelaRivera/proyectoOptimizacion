@@ -7,18 +7,18 @@ from generateNeighborhood import generatingNeighborhood, jobsForEachWoker
 import matplotlib.pyplot as plt
 import math
 
-def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWorker, LTC, O,totalJobs,costWorks,repeat):
+def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWorker, LTC, O,totalJobs,repeat):
     
     globalCost = []
     globalTime = []
     mejorSolucionGlobal = []
     mejorCostoGlobal = None
+    countAux = 0
 
     for count in range(repeat):
         #solucion initial aleatoria
         start_time = time()
         costos = []
-        listWorkerCosto = copy.copy(costWorks)
         mejorCostoGlobal = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O)
         mejorCosto = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O)
         costoActual = funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O)
@@ -28,13 +28,12 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
         Tact = copy.copy(Tmax)
         count = 0
         while(Tact > Tmin):
-            if count % 10 == 0:
+            if count % 100 == 0:
                 print(count)
             count = count + 1
             for i in range(iteracionesInternas):
                 initial_prima = copy.copy(generatingNeighborhood(actualSolucion, LTC, totalJobs, O))
-                #costoNew = copy.copy(funcionObjetivoWithCost(jobsForEachWoker(initial_prima,totalWorker),listWorkerCosto))
-                costoNew = copy.copy(funcionObjetivoWithoutCost(jobsForEachWoker(initial,totalWorker),O))
+                costoNew = copy.copy(funcionObjetivoWithoutCost(jobsForEachWoker(initial_prima,totalWorker),O))
                 error = costoNew - costoActual
                 if error < 0:
                     costoActual = copy.copy(costoNew)
@@ -52,6 +51,8 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
         elapsed_time = time() - start_time
         globalCost.append(costos)
         globalTime.append(elapsed_time)
+        countAux = countAux + 1
+        print("Iteracion " + str(countAux) + ": \n")
     print(mejorSolucionGlobal)
     print("\n")
     aux1 = jobsForEachWoker(initial,totalWorker)
