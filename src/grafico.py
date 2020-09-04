@@ -47,8 +47,7 @@ def graficarStatics(globalBetterSolution,globalTime,repeat):
 		listAux.append(globalBetterSolution[aux])
 		listAux.append(globalTime[aux])
 		dateComplete.append(listAux)
-	print(dateComplete)
-	input("")
+	
 	dateComplete.sort(key = lambda x : x[0][len(x[0])-1])
 
 	colors = ['black','red','gray','orange','gold','yellow','green','aqua','blue','indigo','pink']

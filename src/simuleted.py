@@ -28,9 +28,9 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
         Tact = copy.copy(Tmax)
         count = 0
         while(Tact > Tmin):
-            if count % 100 == 0:
-                print(count)
-            count = count + 1
+            #if count % 100 == 0:
+            #    print(count)
+            #count = count + 1
             for i in range(iteracionesInternas):
                 initial_prima = copy.copy(generatingNeighborhood(actualSolucion, LTC, totalJobs, O))
                 costoNew = copy.copy(funcionObjetivoWithoutCost(jobsForEachWoker(initial_prima,totalWorker),O))
@@ -59,7 +59,6 @@ def simulatedAnneling(Tmax, Tmin, iteracionesInternas, alpha, initial, totalWork
     print(aux1)
     print("La cantidad de trabajadores es: ")
     print(str(funcionObjetivoWithoutCostFinal(aux1)))
-    input("")
     graficarStatics(globalCost,globalTime,repeat)
     return globalCost, globalTime, mejorSolucionGlobal, mejorCostoGlobal
 

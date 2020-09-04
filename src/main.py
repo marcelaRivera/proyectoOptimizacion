@@ -1,4 +1,4 @@
-from lecture import readFile, writeOutSA, writeOutGoloso, writeAnality, writeOutCost
+from lecture import readFile, writeOutSA, writeOutGoloso, writeAnality
 from initialSolution import getHourInit, constructiveO, getEmployersCalificatesInJobs, constructiveHeuristic
 from generateNeighborhood import generatingNeighborhood, test
 from simuleted import simulatedAnneling, funcionObjetivoWithCost,jobsForEachWoker 
@@ -67,32 +67,32 @@ def main():
 			print("Triste:c")
 
 		elif opcion == "3" and jobs is not None and jobsCalificate is not None:
-			"""
+			
 			# Base de datos 1 y 2
-			maxTemp = 0.2
+			maxTemp = 0.1
 			minTemp = 0.00001
-			iteration = 60
-			alpha = 0.99
-			repeat = 15
-
+			iteration = 60 # 20/60/100
+			alpha = 0.99 # 0.99 / 0.95 (Con cada una de las conbinaciones de arriba)
+			repeat = 1
+			"""
 			# Base de datos 3
 			maxTemp = 1
 			minTemp = 0.00001
-			iteration = 60
-			alpha = 0.99
+			iteration = 60 20/60/100
+			alpha = 0.99 # 0.99 / 0.95 (Con cada una de las conbinaciones de arriba)
 			repeat = 15
 
 			# Base de datos 4
 			maxTemp = 0.8
 			minTemp = 0.00001
-			iteration = 60
-			alpha = 0.99
+			iteration = 60 20/60/100
+			alpha = 0.99 # 0.99 / 0.95 (Con cada una de las conbinaciones de arriba)
 			repeat = 15
 			
 			"""
 			#simulatedAnneling(maxTemp,minTemp,iteration,alpha,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),listWorkerCosto,repeat)
 			#print(str(costo))
-			#input("")
+			
 			globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA = simulatedAnneling(maxTemp,minTemp,iteration,alpha,entrada,len(jobsCalificate),jobsCalificate,O,len(jobs),repeat)
 			writeAnality(globalCostSA,globalTimeSA,name[:8])
 			writeOutSA(globalCostSA, globalTimeSA, mejorSolucionGlobalSA, mejorCostoGlobalSA, name[:8] + str(iteration) + "_" + str(alpha) + "" + str(iteration) + "_SA")
